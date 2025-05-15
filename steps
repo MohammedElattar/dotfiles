@@ -1,0 +1,10 @@
+first clone the repo
+
+sudo apt install fzf 
+sudo apt install ripgrep
+sudo apt install xclip
+sudo apt install stow
+
+install lazygit
+change the keymapping of <leader>Y to y directly
+
