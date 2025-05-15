@@ -1,0 +1,27 @@
+general.import = ["~/.config/alacritty/rose-pine-moon.toml"]
+
+[window]
+decorations = "Full"
+padding = { x = 5, y = 5 }
+opacity = 0.9
+
+dimensions = { columns = 120, lines = 45 }
+
+startup_mode = "Maximized"
+
+[font]
+normal = { family = "JetBrains Mono NerdFont", style = "Regular" }
+size = 14
+
+[cursor]
+style = { shape = "Block", blinking = "Always" }
+blink_interval = 400
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+hide_when_typing = false
+
+[colors.primary]
+# background = "#111111"
