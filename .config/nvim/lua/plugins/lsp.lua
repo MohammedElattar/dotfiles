@@ -32,7 +32,7 @@ return {
             capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
             lspconfig.lua_ls.setup { capabilities = capabilities }
-            lspconfig.jdtls.setup { capabilities = capabilities }
+            -- lspconfig.jdtls.setup { capabilities = capabilities }
             lspconfig.ts_ls.setup { capabilities = capabilities }
             lspconfig.intelephense.setup { capabilities = capabilities }
             lspconfig.tailwindcss.setup { capabilities = capabilities }
