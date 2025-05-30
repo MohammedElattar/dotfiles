@@ -3,7 +3,7 @@ general.import = ["~/.config/alacritty/rose-pine-moon.toml"]
 [window]
 decorations = "Full"
 padding = { x = 5, y = 5 }
-opacity = 0.9
+opacity = 0.8
 
 dimensions = { columns = 120, lines = 45 }
 

@@ -40,6 +40,21 @@ return { -- Autocompletion
         local luasnip = require 'luasnip'
         luasnip.config.setup {}
 
+        -- Trigger auto completion in normal mode
+        vim.keymap.set('n', '<C-Space>', function()
+            -- Move to end of current word, enter insert mode, and trigger cmp
+            local keys = vim.api.nvim_replace_termcodes('ea', true, false, true)
+            vim.api.nvim_feedkeys(keys, 'n', false)
+            vim.schedule(function()
+                cmp.complete()
+            end)
+        end, { desc = 'Jump to end of word and trigger completion' })
+
+        -- Map <leader><Tab> in normal mode to enter insert and trigger completion
+        vim.keymap.set('n', '<leader><k>', function()
+            cmp.complete()
+        end, { desc = "Trigger completion in normal mode" })
+
         cmp.setup {
             snippet = {
                 expand = function(args)
@@ -53,8 +68,8 @@ return { -- Autocompletion
             --
             -- No, but seriously. Please read `:help ins-completion`, it is really good!
             mapping = cmp.mapping.preset.insert {
-                ['<C-k>'] = cmp.mapping.select_prev_item(), -- previous suggestion
-                ['<C-j>'] = cmp.mapping.select_next_item(), -- next suggestion
+                ['<C-k>'] = cmp.mapping.select_prev_item(),        -- previous suggestion
+                ['<C-j>'] = cmp.mapping.select_next_item(),        -- next suggestion
                 ['<CR>'] = cmp.mapping.confirm { select = false }, -- Accept the completion
 
                 -- Scroll the documentation window [b]ack / [f]orward
