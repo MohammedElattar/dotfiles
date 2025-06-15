@@ -23,14 +23,9 @@ return {
                 "-data", workspace_dir,
             },
             root_dir = jdtls_setup.find_root({ "gradlew", "mvnw", ".git" }),
-            capabilities = vim.tbl_deep_extend(
-                "force",
-                vim.lsp.protocol.make_client_capabilities(),
-                require("cmp_nvim_lsp").default_capabilities()
-            ),
+            capabilities = require('blink.cmp').get_lsp_capabilities()
         }
 
-        -- Delay until filetype = java and buffer is fully loaded
         vim.api.nvim_create_autocmd("FileType", {
             pattern = "java",
             callback = function()
@@ -38,5 +33,4 @@ return {
             end,
         })
     end
-
 }

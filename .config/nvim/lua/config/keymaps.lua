@@ -11,6 +11,8 @@ vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to the bottom split' })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to the top split' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to the right split' })
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to the left split' })
+vim.keymap.set('n', '<C-b>', '<cmd>bprevious<CR>', { desc = 'Go to previous buffer' })
+vim.keymap.set('n', '<C-n>', '<cmd>bnext<CR>', { desc = 'Go to next buffer' })
 
 -- lines management
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move current line down' })
@@ -22,7 +24,7 @@ vim.keymap.set('n', 'd_', 'd^', { noremap = true, desc = 'Delete to the first no
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll half page down' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll half page up' })
 vim.keymap.set({ 'n', 'v' }, '<S-Down>', '<Down>') -- disable scrolling Down with shift
-vim.keymap.set({ 'n', 'v' }, '<S-Up>', '<Up>') -- disable scrolling Up with shift
+vim.keymap.set({ 'n', 'v' }, '<S-Up>', '<Up>')     -- disable scrolling Up with shift
 
 -- clipboard
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paster without losing the previous yanked text' })
@@ -44,14 +46,16 @@ vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz', { desc = 'Go to quicfix lis
 vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz', { desc = 'Go to quicfix list previous entry' })
 
 -- commands
-vim.keymap.set('n', '<leader>cw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Change the current word in the whole file' })
+vim.keymap.set('n', '<leader>cw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = 'Change the current word in the whole file' })
 vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Make the current file executable' })
 
 -- LSP
 vim.keymap.set('n', '<leader>lr', '<cmd>:LspRestart<cr>', { desc = 'Restart LSP server' })
 
 -- tmux
-vim.keymap.set('n', '<leader>fp', '<cmd>silent !tmux neww tmux-sessionizer<CR>', { desc = 'Find projects with tmux sessionizer' })
+vim.keymap.set('n', '<leader>fp', '<cmd>silent !tmux neww tmux-sessionizer<CR>',
+    { desc = 'Find projects with tmux sessionizer' })
 
 -- theme
 vim.keymap.set('n', '<leader>tc', '<cmd>Telescope colorscheme<CR>', { desc = 'Select colorscheme' })

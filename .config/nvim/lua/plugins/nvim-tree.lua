@@ -44,7 +44,12 @@ return {
         -- set keymaps
         local keymap = vim.keymap
 
-        keymap.set('n', '<C-f>', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' }) -- toggle file explorer
-        keymap.set('n', '<leader>f.', '<cmd>NvimTreeFindFileToggle<CR>', { desc = 'Toggle file explorer on current file' }) -- toggle file explorer on current file
+        keymap.set('n', '<C-f>', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })                              -- toggle file explorer
+        keymap.set('n', '<leader>f.', '<cmd>NvimTreeFindFileToggle<CR>',
+            { desc = 'Toggle file explorer on current file' })                                                              -- toggle file explorer on current file
+        vim.api.nvim_set_hl(0, 'NvimTreeCursorLine', {
+            bg = '#e0def4',
+            fg = '#191724',
+        })
     end,
 }

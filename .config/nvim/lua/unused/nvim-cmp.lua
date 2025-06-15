@@ -73,7 +73,7 @@ return { -- Autocompletion
                 ['<CR>'] = cmp.mapping.confirm { select = false }, -- Accept the completion
 
                 -- Scroll the documentation window [b]ack / [f]orward
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
                 ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
                 -- Manually trigger a completion from nvim-cmp.

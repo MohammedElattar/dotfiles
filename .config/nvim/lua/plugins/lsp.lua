@@ -20,33 +20,32 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        config = function()
+        opts = {
+            servers = {
+                lua_ls = {},
+                intelephense = {},
+                ts_ls = {},
+                tailwindcss = {},
+                emmet_ls = {
+                    filetypes = {
+                        'html',
+                        'typescriptreact',
+                        'javascriptreact',
+                        'css',
+                        'scss',
+                    },
+                },
+            },
+        },
+        config = function(_, opts)
             local lspconfig = require 'lspconfig'
             local telescope = require 'telescope.builtin'
 
-            -- LSP servers and clients are able to communicate to each other what features they support.
-            --  By default, Neovim doesn't support everything that is in the LSP specification.
-            --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-            --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
-            lspconfig.lua_ls.setup { capabilities = capabilities }
-            -- lspconfig.jdtls.setup { capabilities = capabilities }
-            lspconfig.ts_ls.setup { capabilities = capabilities }
-            lspconfig.intelephense.setup { capabilities = capabilities }
-            lspconfig.tailwindcss.setup { capabilities = capabilities }
-            lspconfig.emmet_ls.setup = {
-                capabilities = capabilities,
-                filetypes = {
-                    'html',
-                    'typescriptreact',
-                    'javascriptreact',
-                    'css',
-                    'scss',
-                },
-            }
-
+            for server, config in pairs(opts.servers) do
+                -- config.capabilities = vim.tbl_deep_extend('force', config.capabilities, require('cmp_nvim_lsp').default_capabilities())
+                config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+                lspconfig[server].setup(config)
+            end
             -- INFO: keybindings
             vim.api.nvim_create_autocmd('LspAttach', {
                 callback = function(event)
@@ -99,7 +98,8 @@ return {
                     -- When you move your cursor, the highlights will be cleared (the second autocommand).
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight',
+                            { clear = false })
                         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
                             buffer = event.buf,
                             group = highlight_augroup,
