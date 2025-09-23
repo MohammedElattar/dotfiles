@@ -1,0 +1,11 @@
+{
+  "xml": {
+    "fileAssociations": [
+      {
+        "pattern": "**/pom.xml",
+        "systemId": "https://maven.apache.org/xsd/maven-4.0.0.xsd"
+      }
+    ]
+  }
+}
+

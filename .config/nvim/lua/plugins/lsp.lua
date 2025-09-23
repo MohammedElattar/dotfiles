@@ -23,9 +23,43 @@ return {
         opts = {
             servers = {
                 lua_ls = {},
-                intelephense = {},
+                intelephense = {
+                    settings = {
+                        intelephense = {
+                            stubs = {
+                                "Core",
+                                "PDO",
+                                "json",
+                                "standard",
+                                "wordpress",
+                                "laravel",
+                            },
+                            diagnostics = {
+                                undefinedTypes = false,
+                                undefinedFunctions = false,
+                                undefinedConstants = false,
+                                undefinedClassConstants = false,
+                                undefinedMethods = false,
+                                undefinedProperties = false,
+                            },
+                        },
+                    },
+                },
                 ts_ls = {},
                 tailwindcss = {},
+                lemminx = {
+                    filetypes = {
+                        'xml',
+                    },
+                    settings = {
+                        xml = {
+                            catalogs = {},
+                            server = {
+                                workDir = "~/.cache/lemminx"
+                            }
+                        }
+                    }
+                },
                 emmet_ls = {
                     filetypes = {
                         'html',
@@ -141,6 +175,16 @@ return {
                     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
                 end
             end
+
+            vim.diagnostic.config({
+                virtual_text = false,
+                signs = true,
+                underline = true,
+                update_in_insert = false,
+                severity_sort = true,
+            })
+
+            vim.o.updatetime = 250
         end,
     },
 }

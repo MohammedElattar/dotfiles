@@ -63,3 +63,6 @@ vim.keymap.set('n', '<leader>tc', '<cmd>Telescope colorscheme<CR>', { desc = 'Se
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
+
+vim.keymap.set('n', '<leader>cc', '<cmd>ClaudeCode<CR>', { desc = 'Toggle Claude Code' })
+
