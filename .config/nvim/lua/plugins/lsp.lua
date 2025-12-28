@@ -14,6 +14,7 @@ return {
                     'intelephense',
                     'lua_ls',
                     'jdtls',
+                    'gopls',
                 },
             }
         end,
@@ -67,6 +68,17 @@ return {
                         'javascriptreact',
                         'css',
                         'scss',
+                    },
+                },
+                gopls = {
+                    settings = {
+                        gopls = {
+                            gofumpt = true,
+                            analyses = {
+                                unusedparams = true,
+                            },
+                            staticcheck = true,
+                        },
                     },
                 },
             },

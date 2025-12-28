@@ -1,20 +1,14 @@
 return {
-    {
-        'jwalton512/vim-blade',
-        ft = { 'blade' },
+    "adalessa/laravel.nvim",
+    ft = "php",
+    dependencies = {
+        "nvim-telescope/telescope.nvim",
+        "neovim/nvim-lspconfig",
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        "nvim-neotest/nvim-nio"
     },
-
-    {
-        'adalessa/laravel.nvim',
-        dependencies = {
-            'tpope/vim-dotenv',
-            'nvim-telescope/telescope.nvim',
-            'MunifTanjim/nui.nvim',
-            'kevinhwang91/promise-async',
-        },
-        cmd = { 'Laravel' },
-        event = { 'VeryLazy' },
-        opts = {},
-        config = true,
-    },
+    config = function()
+        require("laravel").setup({})
+    end,
 }
