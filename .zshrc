@@ -210,9 +210,7 @@ elif type compctl &>/dev/null; then
   compctl -K _pm2_completion + -f + pm2
 fi
 ###-end-pm2-completion-###
-export GEMINI_API_KEY=AIzaSyCSMlo0lFHN7qhfE-_eE4ujwWYfLb9GVfE
 export QT_QPA_PLATFORM=xcb
 export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:/usr/local/go/bin
-export POSTGRES_DSN="postgres://root:12345678@localhost/greenlight?sslmode=disable"
 
