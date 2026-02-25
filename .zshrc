@@ -213,4 +213,7 @@ fi
 export QT_QPA_PLATFORM=xcb
 export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:/usr/local/go/bin
+export PATH="$HOME/.local/bin:$PATH"
 
+export PATH="$HOME/.local/bin:$PATH"
+export MOVIE_RESERVATION_DSN="postgres://root:12345678@127.0.0.1:5432/movie_reservation?sslmode=disable"
