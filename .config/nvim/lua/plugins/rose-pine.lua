@@ -80,9 +80,12 @@ return {
             },
         }
 
-        vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-            border = 'rounded', -- options: "single", "double", "rounded", "solid", "shadow", or custom table
-        })
+        -- ✅ FIXED: vim.lsp.with() was removed in Neovim 0.12
+        -- Modern approach: wrap the handler to inject config safely
+        vim.lsp.handlers['textDocument/hover'] = function(err, result, ctx, config)
+            config = vim.tbl_deep_extend('force', config or {}, { border = 'rounded' })
+            return vim.lsp.handlers.hover(err, result, ctx, config)
+        end
 
         vim.cmd 'colorscheme rose-pine'
     end,
