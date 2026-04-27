@@ -46,10 +46,20 @@ vim.api.nvim_create_autocmd("FileType", {
 local treesitter_autostart = vim.api.nvim_create_augroup("treesitter-autostart", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
     group = treesitter_autostart,
-    pattern = { "svelte", "typescriptreact", "javascriptreact", "css", "scss", "less", "php" },
+    pattern = { "svelte", "typescriptreact", "javascriptreact", "css", "scss", "less", "php", "blade" },
     callback = function(ev)
         local buf = ev.buf
         pcall(vim.treesitter.start, buf)
+        -- Legacy :syntax must stay on for indent/omni that use synID() (e.g. PHP, Lua).
+        -- TS highlighter attaches asynchronously; re-apply after it runs.
+        local function legacy_syntax_on()
+            if vim.api.nvim_buf_is_valid(buf) then
+                vim.bo[buf].syntax = "ON"
+            end
+        end
+        legacy_syntax_on()
+        vim.schedule(legacy_syntax_on)
+        vim.defer_fn(legacy_syntax_on, 100)
         vim.b[buf].undo_ftplugin = (vim.b[buf].undo_ftplugin or "") .. " | lua pcall(vim.treesitter.stop)"
     end,
 })

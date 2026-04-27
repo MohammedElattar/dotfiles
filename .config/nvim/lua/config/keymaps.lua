@@ -1,3 +1,7 @@
+-- `I` inserts before the first *character* on the line (often column 0 on indented
+-- lines). Use first-nonblank + insert so "smart insert" stays aligned with code.
+vim.keymap.set('n', 'I', '^i', { desc = 'Insert at first non-blank' })
+
 -- window management
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = 'Split window vertically' })
 vim.keymap.set('n', '<leader>sh', '<C-w>s', { desc = 'Split window horizontally' })

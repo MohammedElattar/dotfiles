@@ -81,9 +81,10 @@ opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 opt.scrolloff = 20
 
--- Folding
-vim.o.foldcolumn = "0" -- '0' is not bad
-vim.o.foldlevel = 1 -- Using ufo provider need a large value, feel free to decrease the value
+-- Folding: foldlevel=1 + foldclose=all was for nvim-ufo; without ufo it collapses almost
+-- everything and closes folds on every move, which breaks normal editing (e.g. `o`, indent).
+vim.o.foldcolumn = "0"
+vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
-vim.o.foldclose = "all"
+vim.o.foldclose = "" -- default: do not auto-close folds when leaving them
