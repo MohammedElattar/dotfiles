@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd("FileType", {
         require("kulala").setup({
             global_keymaps = true,
             lsp = { formatter = true },
-            ui = { display_mode = "split" },
+            ui = { display_mode = "split", split_direction = "horizontal" },
         })
 
         vim.keymap.set("n", "<leader>ke", function()

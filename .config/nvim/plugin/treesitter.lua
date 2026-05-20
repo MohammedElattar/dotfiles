@@ -18,6 +18,8 @@ local ts_langs = {
     "javascript",
     "json",
     "markdown",
+    "go",
+    "yaml",
 }
 
 require("nvim-treesitter").setup({})

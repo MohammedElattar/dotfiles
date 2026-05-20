@@ -16,6 +16,7 @@ vim.g.loaded_netrwPlugin = 1
 
 require("neo-tree").setup({
     filesystem = {
+        use_libuv_file_watcher = true,
         hijack_netrw_behavior = "open_current",
         filtered_items = {
             hide_dotfiles = false,

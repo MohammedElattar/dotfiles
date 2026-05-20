@@ -63,3 +63,14 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.b[buf].undo_ftplugin = (vim.b[buf].undo_ftplugin or "") .. " | lua pcall(vim.treesitter.stop)"
     end,
 })
+
+-- Go: no runtime vim.treesitter.start(); parser must be installed (see plugin/treesitter.lua)
+vim.api.nvim_create_autocmd("FileType", {
+    group = treesitter_autostart,
+    pattern = { "go", "yaml" },
+    callback = function(ev)
+        local buf = ev.buf
+        pcall(vim.treesitter.start, buf)
+        vim.b[buf].undo_ftplugin = (vim.b[buf].undo_ftplugin or "") .. " | lua pcall(vim.treesitter.stop)"
+    end,
+})
