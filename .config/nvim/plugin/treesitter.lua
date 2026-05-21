@@ -20,6 +20,7 @@ local ts_langs = {
     "markdown",
     "go",
     "yaml",
+    "sql",
 }
 
 require("nvim-treesitter").setup({})

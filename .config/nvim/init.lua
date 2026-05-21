@@ -18,6 +18,7 @@ require("mason-lspconfig").setup({
         "intelephense",
         "phpactor",
         "gopls",
+        "postgres_lsp",
     },
 })
 
@@ -54,6 +55,41 @@ vim.lsp.config("phpactor", {
         ["language_server_phpstan.enabled"] = false,
         ["language_server_psalm.enabled"] = false,
     },
+})
+
+-- Postgres LSP (postgres-language-server, formerly postgrestools).
+-- Provides syntax errors, linting, type-checking and completion for SQL.
+-- Override workspace_required so it also attaches to standalone .sql files
+-- without needing a postgres-language-server.jsonc at the project root.
+vim.lsp.config("postgres_lsp", {
+    cmd = { "postgres-language-server", "lsp-proxy" },
+    filetypes = { "sql" },
+    root_markers = { "postgres-language-server.jsonc", ".git" },
+    workspace_required = false,
+})
+
+-- Per-project DATABASE_URL: before opening a .sql buffer, walk up to find
+-- the nearest .env and load DATABASE_URL from it into vim.env. The Postgres
+-- LSP inherits vim.env on spawn, so no per-project init.lua edits needed.
+-- Use .env itself as the marker (independent of where the jsonc lives, so
+-- nested per-folder configs still resolve the project-root .env correctly).
+-- Workflow per project: drop postgres-language-server.jsonc + a .env
+-- containing DATABASE_URL=postgres://... in the repo root.
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+    group = vim.api.nvim_create_augroup("postgres-lsp-dotenv", { clear = true }),
+    pattern = "*.sql",
+    callback = function(args)
+        local envdir = vim.fs.root(args.buf, ".env")
+        if not envdir then return end
+        for line in io.lines(envdir .. "/.env") do
+            local val = line:match("^%s*DATABASE_URL%s*=%s*(.*)%s*$")
+            if val then
+                val = val:gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
+                vim.env.DATABASE_URL = val
+                return
+            end
+        end
+    end,
 })
 
 vim.lsp.config("gopls", {

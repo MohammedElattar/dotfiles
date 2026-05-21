@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Go: no runtime vim.treesitter.start(); parser must be installed (see plugin/treesitter.lua)
 vim.api.nvim_create_autocmd("FileType", {
     group = treesitter_autostart,
-    pattern = { "go", "yaml" },
+    pattern = { "go", "yaml", "sql" },
     callback = function(ev)
         local buf = ev.buf
         pcall(vim.treesitter.start, buf)
