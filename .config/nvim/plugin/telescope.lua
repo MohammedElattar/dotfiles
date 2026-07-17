@@ -33,56 +33,86 @@ vim.api.nvim_create_autocmd("VimEnter", {
 local builtin = require("telescope.builtin")
 local lsp_util = require("vim.lsp.util")
 
+--- Jump to a single location or populate quickfix when there are many.
+--- Returns true if we jumped/opened qflist, false if the result was empty.
+local function jump_to_locations(result, client, win, bufnr, tagname, from)
+    if result == nil then return false end
+    local locations = vim.islist(result) and result or { result }
+    local items = lsp_util.locations_to_items(locations, client.offset_encoding)
+    if vim.tbl_isempty(items) then return false end
+    if #items == 1 then
+        local item = items[1]
+        local b = item.bufnr or vim.fn.bufadd(item.filename)
+        vim.cmd("normal! m'")
+        vim.fn.settagstack(vim.fn.win_getid(win), { items = { { tagname = tagname, from = from } } }, "t")
+        vim.bo[b].buflisted = true
+        vim.api.nvim_win_set_buf(win, b)
+        vim.api.nvim_win_set_cursor(win, { item.lnum, item.col - 1 })
+        vim._with({ win = win }, function()
+            vim.cmd("normal! zv")
+        end)
+        return true
+    end
+    vim.fn.setqflist({}, " ", { title = "LSP locations", items = items })
+    vim.cmd("botright copen")
+    return true
+end
+
 --- On PHP we attach phpactor for rename; `gd` would merge definition results from both servers.
 --- Use Intelephense only here so navigation matches a single LSP.
+--- On Go, gopls' definition at an interface method call goes to the interface, not the
+--- concrete implementation. Try `implementation` first and fall back to `definition`.
 local function lsp_goto_definition()
-    if vim.bo.filetype ~= "php" then
+    local ft = vim.bo.filetype
+    local bufnr = vim.api.nvim_get_current_buf()
+    local win = vim.api.nvim_get_current_win()
+    local tagname = vim.fn.expand("<cword>")
+    local from = vim.fn.getpos(".")
+    from[1] = bufnr
+
+    if ft == "go" then
+        local clients = vim.lsp.get_clients({ bufnr = bufnr, name = "gopls" })
+        if #clients == 0 then
+            vim.lsp.buf.definition()
+            return
+        end
+        local client = clients[1]
+        local params = lsp_util.make_position_params(win, client.offset_encoding)
+        client:request("textDocument/implementation", params, function(_, impl_result)
+            if jump_to_locations(impl_result, client, win, bufnr, tagname, from) then return end
+            client:request("textDocument/definition", params, function(err, def_result)
+                if err then
+                    vim.notify(("[LSP][%s] %s"):format(client.name, err.message or tostring(err)), vim.log.levels.ERROR)
+                    return
+                end
+                if not jump_to_locations(def_result, client, win, bufnr, tagname, from) then
+                    vim.notify("No locations found", vim.log.levels.INFO)
+                end
+            end, bufnr)
+        end, bufnr)
+        return
+    end
+
+    if ft ~= "php" then
         vim.lsp.buf.definition()
         return
     end
     local method = "textDocument/definition"
-    local bufnr = vim.api.nvim_get_current_buf()
-    local win = vim.api.nvim_get_current_win()
     local clients = vim.lsp.get_clients({ bufnr = bufnr, name = "intelephense", method = method })
     if #clients == 0 then
         vim.lsp.buf.definition()
         return
     end
     local client = clients[1]
-    local tagname = vim.fn.expand("<cword>")
-    local from = vim.fn.getpos(".")
-    from[1] = bufnr
     local params = lsp_util.make_position_params(win, client.offset_encoding)
     client:request(method, params, function(err, result, _)
         if err then
             vim.notify(("[LSP][%s] %s"):format(client.name, err.message or tostring(err)), vim.log.levels.ERROR)
             return
         end
-        if result == nil then
+        if not jump_to_locations(result, client, win, bufnr, tagname, from) then
             vim.notify("No locations found", vim.log.levels.INFO)
-            return
         end
-        local locations = vim.islist(result) and result or { result }
-        local items = lsp_util.locations_to_items(locations, client.offset_encoding)
-        if vim.tbl_isempty(items) then
-            vim.notify("No locations found", vim.log.levels.INFO)
-            return
-        end
-        if #items == 1 then
-            local item = items[1]
-            local b = item.bufnr or vim.fn.bufadd(item.filename)
-            vim.cmd("normal! m'")
-            vim.fn.settagstack(vim.fn.win_getid(win), { items = { { tagname = tagname, from = from } } }, "t")
-            vim.bo[b].buflisted = true
-            vim.api.nvim_win_set_buf(win, b)
-            vim.api.nvim_win_set_cursor(win, { item.lnum, item.col - 1 })
-            vim._with({ win = win }, function()
-                vim.cmd("normal! zv")
-            end)
-            return
-        end
-        vim.fn.setqflist({}, " ", { title = "LSP locations", items = items })
-        vim.cmd("botright copen")
     end, bufnr)
 end
 

@@ -2,6 +2,9 @@ require("config")
 
 -- auto confirm new packages installation
 vim.g.vim_pack_auto_confirm = true
+if vim.env.KHATT ~= nil or vim.env.TERM_PROGRAM == "khatt" then
+  vim.opt.termbidi = true
+end
 
 vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig",
