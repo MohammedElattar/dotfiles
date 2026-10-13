@@ -1,3 +1,4 @@
+export PATH="/home/elattar/.nvm/versions/node/v24.18.0/bin:$PATH"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -75,6 +76,11 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+# Use emacs line-editing keybindings. Oh My Zsh already sets this, but make it
+# explicit so the shell never falls back to vi-mode (zsh's default when
+# $EDITOR=vim and no keymap is selected).
+bindkey -e
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -221,3 +227,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 export MOVIE_RESERVATION_DSN="postgres://root:12345678@127.0.0.1:5432/movie_reservation?sslmode=disable"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# OpenClaw Completion
+[ -f "/home/elattar/.openclaw/completions/openclaw.zsh" ] && source "/home/elattar/.openclaw/completions/openclaw.zsh"
