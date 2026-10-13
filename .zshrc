@@ -118,7 +118,11 @@ alias la='ls -a'
 alias cna='npx create-next-app@latest'
 alias lg='lazygit'
 
-bindkey -s ^f "tmux-sessionizer\n"
+if [[ -n $HERDR_ENV ]]; then
+    bindkey -s ^f "herdr-sessionizer\n"
+else
+    bindkey -s ^f "tmux-sessionizer\n"
+fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

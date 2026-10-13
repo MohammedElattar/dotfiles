@@ -1,0 +1,104 @@
+onboarding = false
+
+##### THEME (rose-pine, main variant) #####
+
+[theme]
+name = "rose-pine"
+
+# Transparent background (@rose_pine_bar_bg_disable)
+[theme.custom]
+panel_bg = "reset"
+
+
+##### STATUS / BORDERS #####
+
+[ui]
+tab_bar_position = "bottom"
+tab_bar_right = [
+    { type = "text", text = "elattar  \uf007" },
+    { type = "datetime", format = "%H:%M:%S  \U000F00F0" },
+]
+tab_bar_right_separator = "  "
+
+# tmux-style single dividers between panes, no outer frame
+pane_gaps = false
+pane_outer_borders = false
+
+# new-window creates the tab immediately, without asking for a name
+prompt_new_tab_name = false
+
+
+##### KEYS #####
+
+[keys]
+# Ctrl+A instead of Ctrl+B (press it twice to send a literal Ctrl+A)
+prefix = "ctrl+a"
+
+reload_config = "prefix+r"
+
+# Splits
+split_vertical = "prefix+="
+split_horizontal = "prefix+minus"
+
+# Shift + Alt vim keys to switch windows (tabs)
+previous_tab = ["prefix+p", "alt+shift+h"]
+next_tab = ["prefix+n", "alt+shift+l"]
+
+# Previous / next workspace (tmux sessions)
+previous_workspace = "prefix+("
+next_workspace = "prefix+)"
+
+# Pane management
+swap_pane_up = ["prefix+shift+k", "prefix+u"]
+zoom = ["prefix+z", "prefix+m"]
+resize_pane_left = "prefix+h"
+resize_pane_down = "prefix+j"
+resize_pane_up = "prefix+k"
+resize_pane_right = "prefix+l"
+
+# herdr has no bind -r repeat: resize mode takes h/j/k/l until esc
+resize_mode = "prefix+shift+r"
+
+# prefix+h/j/k/l resize, so prefix focus moves to the arrows (tmux defaults)
+focus_pane_left = "prefix+left"
+focus_pane_down = "prefix+down"
+focus_pane_up = "prefix+up"
+focus_pane_right = "prefix+right"
+
+
+##### SESSIONIZER #####
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.local/bin/herdr-sessionizer"
+description = "sessionizer (project picker)"
+width = "80%"
+height = "80%"
+
+
+##### VIM NAVIGATOR (vim-tmux-navigator, see ~/.config/herdr/vim-navigator) #####
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-navigator.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-navigator.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-navigator.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-navigator.right"
+description = "navigate right (vim/herdr)"
